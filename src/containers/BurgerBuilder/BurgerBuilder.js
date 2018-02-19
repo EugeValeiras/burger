@@ -12,57 +12,42 @@ import axios from '../../axios-orders';
 import * as actionTypes from '../../store/actions';
 
 class BurgerBuilder extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {...}
-    // }
     state = {
         purchasing: false,
         loading: false,
         error: false
-    }
+    };
 
     componentDidMount () {
         console.log(this.props);
-        // axios.get( 'https://react-my-burger.firebaseio.com/ingredients.json' )
-        //     .then( response => {
-        //         this.setState( { ingredients: response.data } );
-        //     } )
-        //     .catch( error => {
-        //         this.setState( { error: true } );
-        //     } );
-    }
+    };
 
-    updatePurchaseState ( ingredients ) {
-        const sum = Object.keys( ingredients )
-            .map( igKey => {
-                return ingredients[igKey];
-            } )
-            .reduce( ( sum, el ) => {
-                return sum + el;
-            }, 0 );
-        return sum > 0;
+    updatePurchaseState () {
+        return this.props.ings.length > 0;
     }
 
     purchaseHandler = () => {
         this.setState( { purchasing: true } );
-    }
+    };
 
     purchaseCancelHandler = () => {
         this.setState( { purchasing: false } );
-    }
+    };
 
     purchaseContinueHandler = () => {
         this.props.history.push('/checkout');
-    }
+    };
 
     render () {
-        const disabledInfo = {
-            ...this.props.ings
-        };
-        for ( let key in disabledInfo ) {
-            disabledInfo[key] = disabledInfo[key] <= 0
-        }
+        const disabledInfo = {};
+        const uniqueIng = this.props.ings.filter((elem, pos, arr) => {
+            return arr.indexOf(elem) == pos;
+        });
+
+        uniqueIng.forEach(ing => {
+            disabledInfo[ing] = true
+        });
+
         let orderSummary = null;
         let burger = this.state.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
 

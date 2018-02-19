@@ -8,13 +8,12 @@ const order = ( props ) => {
     for ( let ingredientName in props.ingredients ) {
         ingredients.push(
             {
-                name: ingredientName,
-                amount: props.ingredients[ingredientName]
+                name: props.ingredients[ingredientName]
             }
         );
     }
 
-    const ingredientOutput = ingredients.map(ig => {
+    const ingredientOutput = ingredients.map((ig, index) => {
         return <span 
             style={{
                 textTransform: 'capitalize',
@@ -23,7 +22,7 @@ const order = ( props ) => {
                 border: '1px solid #ccc',
                 padding: '5px'
                 }}
-            key={ig.name}>{ig.name} ({ig.amount})</span>;
+            key={index}>{index}: {ig.name}</span>;
     });
 
     return (

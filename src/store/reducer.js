@@ -1,12 +1,7 @@
 import * as actionTypes from './actions';
 
 const initialState = {
-    ingredients: {
-        salad: 0,
-        bacon: 0,
-        cheese: 0,
-        meat: 0
-    },
+    ingredients: [],
     totalPrice: 4
 };
 
@@ -14,7 +9,8 @@ const INGREDIENT_PRICES = {
     salad: 0.5,
     cheese: 0.4,
     meat: 1.3,
-    bacon: 0.7
+    bacon: 0.7,
+    breadMiddle: 0.1,
 };
 
 const reducer = ( state = initialState, action ) => {
@@ -22,19 +18,19 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.ADD_INGREDIENT:
             return {
                 ...state,
-                ingredients: {
+                ingredients: [
                     ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName] + 1
-                },
+                    action.ingredientName
+                ],
                 totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
             };
         case actionTypes.REMOVE_INGREDIENT:
+            const ingredients = state.ingredients.reverse();
+            const index = ingredients.indexOf(action.ingredientName);
+            ingredients.splice(index, 1);
             return {
                 ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName] - 1
-                },
+                ingredients: ingredients.reverse(),
                 totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]
             };
         default:
